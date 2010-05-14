@@ -78,7 +78,7 @@ module InPlaceMacrosHelper
     return tag + in_place_editor(tag_options[:id], in_place_editor_options)
   end
 
-  ##
+  ## borrowed from: http://www.agileapproach.com/blog-entry/select-list-inline-editing-rails
   # Renders an in-place select similar to in_place_editor.  Options are the same as those supported by
   # InPlaceMacrosHelper.in_place_editor(), plus some extra ones to deal with the list:
   #

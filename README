@@ -21,3 +21,20 @@ end
 # View
   <div id="edit_item_quantity" class="inPlaceDiv"><%= item.quantity %></div>
   <%= in_place_editor "edit_item_quantity", :url => url_for(:action=>:set_item_qunatity, :id=>item.id) %>
+
+
+in_place_edit_for_extended: allows assign object instead params[:value] to object attribute, also is possible said what is the kind of object assigned
+
+class ItemController < ApplicationController
+  in_place_edit_for_extended :item, :color, relation => true
+end
+
+will assign a Color object to item.color attribute
+
+class ItemsController < ApplicationController
+  in_place_edit_for_extended :item, :color, :relation => true, :class_name => 'NpColor'
+end
+
+will assign a NpColor object to item.color attribute
+
+
