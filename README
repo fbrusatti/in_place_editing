@@ -13,35 +13,46 @@ Original Example:
 
 Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license  
 
-My Examples
------------
-# Controller
-class Admin::ItemsController < ApplicationController
-  in_place_edit_for :item, :quantity
-end
+in_place_edit_for
+=================
+  Own example because I don't understand the original one :P
 
-# View
-  <div id="edit_item_quantity" class="inPlaceDiv"><%= item.quantity %></div>
-  <%= in_place_editor "edit_item_quantity", :url => url_for(:action=>:set_item_qunatity, :id=>item.id) %>
+  # Controller
+  Class Admin::ItemsController < ApplicationController
+    in_place_edit_for :item, :quantity
+  end
+
+  # View
+    <div id="edit_item_quantity" class="inPlaceDiv"><%= item.quantity %></div>
+    <%= in_place_editor "edit_item_quantity", :url => url_for(:action=>:set_item_qunatity, :id=>item.id) %>
 
 
 in_place_edit_for_extended: 
---------------------------
-allows assign object instead params[:value] to object attribute, also is possible configure what is the kind of object assigned
+==========================
+  'relation' and 'class_name' options 
+  -----------------------------------
+  allows assign object instead params[:value] to object attribute, also is possible configure what is the kind of object assigned
 
-class ItemController < ApplicationController
-  in_place_edit_for_extended :item, :color, relation => true
-end
+  Class ItemController < ApplicationController
+    in_place_edit_for_extended :item, :color, relation => true
+  end
+  will assign a Color object to item.color attribute
 
-will assign a Color object to item.color attribute
+  Class ItemsController < ApplicationController
+    in_place_edit_for_extended :item, :color, :relation => true, :class_name => 'NpColor'
+  end
+  will assign a NpColor object to item.color attribute
 
-class ItemsController < ApplicationController
-  in_place_edit_for_extended :item, :color, :relation => true, :class_name => 'NpColor'
-end
+  'response' and 'lambda' options
+  -------------------------------
+  allows redirect with a render :update block instead the render :text used by the original method
 
-will assign a NpColor object to item.color attribute
+  Class ItemController < ApplicationController
+    in_place_edit_for_extended :item, :quantity, :response => true, 
+                               :lambda => lambda { |page, item| page.replace_html "pricing_#{item.quick_quote.id}", :partial=>'details', :locals => {:quote => item.quick_quote}}
+  end
 
 
 in_place_select helper
-----------------------
+=====================
   <%= in_place_select "edit_item_color", :url => url_for(:controller => "items", :action => :set_item_color, :id => item.id), :collection => NpColor.all.map{|x| [x.name, x.id]} %>
