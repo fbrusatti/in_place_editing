@@ -1,7 +1,7 @@
 InPlaceEditing
 ==============
 
-Example:
+Original Example:
 
   # Controller
   class BlogController < ApplicationController
@@ -13,6 +13,8 @@ Example:
 
 Copyright (c) 2007 David Heinemeier Hansson, released under the MIT license  
 
+My Examples
+-----------
 # Controller
 class Admin::ItemsController < ApplicationController
   in_place_edit_for :item, :quantity
@@ -23,7 +25,9 @@ end
   <%= in_place_editor "edit_item_quantity", :url => url_for(:action=>:set_item_qunatity, :id=>item.id) %>
 
 
-in_place_edit_for_extended: allows assign object instead params[:value] to object attribute, also is possible said what is the kind of object assigned
+in_place_edit_for_extended: 
+--------------------------
+allows assign object instead params[:value] to object attribute, also is possible configure what is the kind of object assigned
 
 class ItemController < ApplicationController
   in_place_edit_for_extended :item, :color, relation => true
@@ -38,3 +42,6 @@ end
 will assign a NpColor object to item.color attribute
 
 
+in_place_select helper
+----------------------
+  <%= in_place_select "edit_item_color", :url => url_for(:controller => "items", :action => :set_item_color, :id => item.id), :collection => NpColor.all.map{|x| [x.name, x.id]} %>
