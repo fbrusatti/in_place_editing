@@ -29,6 +29,8 @@ module InPlaceEditing
     # options:
     ##    relation: true/false if attribute is an object that has to be searched in a relation
     ##    class_name: name of the relation where we have to search attribute associated with
+    ##    response: true/false if response has to be done with js format
+    ##    lambda: js code to interpret into render :update block
     def in_place_edit_for_extended(object, attribute, options = {})
       define_method("set_#{object}_#{attribute}") do
         unless [:post, :put].include?(request.method) then
@@ -46,8 +48,21 @@ module InPlaceEditing
 
         @item.update_attribute(attribute, @attribute)
 
-        render :text => CGI::escapeHTML(@item.send(attribute).to_s)
+        @response = options[:response] || false
+        if @response
+            respond_to do |format|
+                format.js do
+                    render :update do |page|
+                        options[:lambda].call(page, @item)
+                    end
+                end
+            end
+        else
+            render :text => CGI::escapeHTML(@item.send(attribute).to_s)
+        end
       end
     end
+
   end
 end
+
